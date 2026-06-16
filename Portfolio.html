@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANILO.DEV</title>
+    <meta property="og:title" content="DANILO.DEV" />
+    <meta property="og:description"
+        content="Desenvolvedor Backend • Java •  Node.js • Python • Aplicações robustas, escaláveis e seguras" />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Bibliotecas JS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">DANILO<span>.</span>DEV</a>
+        <ul class="nav-links">
+            <li><a href="#sobre">sobre</a></li>
+            <li><a href="#projetos">projetos</a></li>
+            <li><a href="#github">github</a></li>
+            <li><a href="#contato">contato</a></li>
+            <li><button id="theme-toggle" aria-label="Alternar tema"
+                    style="background:none;border:none;color:var(--text);cursor:pointer;display:flex;align-items:center;"><i
+                        data-lucide="moon"></i></button></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div id="tsparticles" style="position: absolute; width: 100%; height: 100%; z-index: 0;"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">Desenvolvedor full stack</p>
+            <h1>
+                Danilo Silva<span class="accent">.</span>
+            </h1>
+            <p class="hero-title-sub"><span id="typed-text"></span></p>
+            <p class="hero-desc">
+                Desenvolvedor apaixonado por construir <strong>interfaces modernas</strong> e <strong>sistemas
+                    robustos</strong>. Transformo ideias em código — linha por linha, commit por commit.
+            </p>
+            <div class="hero-cta">
+                <a href="#projetos" class="btn-primary">ver projetos</a>
+                <a href="#contato" class="btn-ghost">falar comigo</a>
+            </div>
+        </div>
+
+        <!-- Stats floating -->
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="num" id="stat-repos">...</div>
+                <div class="label">repositórios</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="stat-stars">0</div>
+                <div class="label">stars earned</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">2+</div>
+                <div class="label">anos dev</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="sobre">
+        <div class="section-inner">
+            <p class="section-eyebrow">sobre mim</p>
+            <h2>Quem está do outro lado</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        Olá! Sou <strong>Danilo</strong>, desenvolvedor focado em construir experiências digitais que
+                        realmente funcionam. Gosto de código limpo, boas práticas e de aprender coisas novas
+                        constantemente.
+                    </p>
+                    <p>
+                        Minha stack favorita envolve <strong>JavaScript/TypeScript</strong> no front e back, mas não
+                        tenho medo de explorar outras tecnologias quando o projeto pede. Cada problema é uma chance de
+                        evoluir.
+                    </p>
+                    <p>
+                        Nas horas vagas, consumo anime, levo commits a sério e acredito que bom código é como uma boa
+                        história — tem começo, meio e fim claros.
+                    </p>
+                </div>
+                <div>
+                    <div class="skills-grid">
+                        <div class="skill-tag">JavaScript</div>
+                        <div class="skill-tag">TypeScript</div>
+                        <div class="skill-tag">React</div>
+                        <div class="skill-tag">Node.js</div>
+                        <div class="skill-tag">Python</div>
+                        <div class="skill-tag">PostgreSQL</div>
+                        <div class="skill-tag">Docker</div>
+                        <div class="skill-tag">Git / GitHub</div>
+                        <div class="skill-tag">REST APIs</div>
+                        <div class="skill-tag">CSS / Tailwind</div>
+                        <div class="skill-tag">Linux</div>
+                        <div class="skill-tag">Next.js</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projetos" class="projects-bg">
+        <div class="section-inner">
+            <p class="section-eyebrow">projetos</p>
+            <h2>O que já construí</h2>
+            <div class="project-filters" style="display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap;">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="React">React</button>
+                <button class="filter-btn" data-filter="Node.js">Node.js</button>
+                <button class="filter-btn" data-filter="Python">Python</button>
+            </div>
+            <div class="projects-grid">
+
+                <div class="project-card span-col-2">
+                    <div class="project-num">PROJ_001</div>
+                    <h3>Carona Universitário</h3>
+                    <p>Projeto focado no compartilhamento inteligente de caronas universitárias.</p>
+                    <div class="project-tags">
+                        <span class="tag">Dart</span>
+                        <span class="tag">Flutter</span>
+                        <span class="tag">Firabase</span>
+                        <span class="tag">REST APIs</span>
+                    </div>
+                    <a href="https://github.com/Danilo019/TCC-CARONA-UNIVERSIT-RIO" class="project-link"
+                        target="_blank">ver no
+                        github</a>
+                </div>
+
+                <div class="project-card span-row-2">
+                    <div class="project-num">PROJ_002</div>
+                    <h3>Programa almoxarife</h3>
+                    <p>Sistema desenvolvido para controle de estoque e fluxo de materiais.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">SQLite</span>
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                    </div>
+                    <a href="https://github.com/Danilo019/Programa-almoxarife" class="project-link" target="_blank">ver
+                        no
+                        github</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-num">PROJ_003</div>
+                    <h3>Inventario de Materiais de Obra</h3>
+                    <p>Aplicação para rastrear e inventariar materiais na construção civil.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">SQLite</span>
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                    </div>
+                    <a href="https://github.com/Danilo019/Invent-rio-de-Materiais-de-Obra" class="project-link"
+                        target="_blank">ver no
+                        github</a>
+                </div>
+
+                <div class="project-card span-col-2">
+                    <div class="project-num">PROJ_004</div>
+                    <h3>Desafio backend sea</h3>
+                    <p>Sistema de Gestão de Clientes desenvolvido como desafio técnico para a Sea Solutions</p>
+                    <div class="project-tags">
+                        <span class="tag">Java</span>
+                        <span class="tag">SpringBoot</span>
+                        <span class="tag">Mysql</span>
+                        <span class="tag">Docker</span>
+                        <span class="tag">JPA</span>
+                        <span class="tag">Maven</span>
+                        <span class="tag">Rest Api</span>
+                        <span class="tag">Spring Security</span>
+                        <span class="tag">Flyway</span>
+                        <span class="tag">Jwt</span>
+                    </div>
+                    <a href="https://github.com/Danilo019/desafio-backend-sea" class="project-link" target="_blank">ver
+                        no github</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- GITHUB -->
+    <section id="github" class="github-section">
+        <div class="section-inner">
+            <p class="section-eyebrow">github</p>
+            <h2>Presença no código</h2>
+            <div class="github-card">
+                <div class="username" id="gh-name">seu-usuario</div>
+                <div class="handle" id="gh-bio">carregando dados...</div>
+                <div class="github-stats">
+                    <div class="github-stat">
+                        <span class="n" id="gh-repos">–</span>
+                        <span class="l">repositórios</span>
+                    </div>
+                    <div class="github-stat">
+                        <span class="n" id="gh-followers">–</span>
+                        <span class="l">seguidores</span>
+                    </div>
+                    <div class="github-stat">
+                        <span class="n" id="gh-following">–</span>
+                        <span class="l">seguindo</span>
+                    </div>
+                </div>
+            </div>
+            <p style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text-muted);margin-top:1rem;">
+                <a href="https://github.com/Danilo019" target="_blank"
+                    style="color:var(--blue-light);text-decoration:none;">github.com/Danilo019 →</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contato" class="contact-bg">
+        <div class="section-inner">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <p class="section-eyebrow">contato</p>
+                    <h2>Vamos conversar?</h2>
+                    <p>
+                        Estou aberto a oportunidades de emprego, projetos freelance e colaborações. Se tem uma ideia
+                        interessante ou uma vaga bacana, me manda mensagem.
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:[EMAIL_ADDRESS]" class="contact-link">
+                            <span class="icon"><i data-lucide="mail"></i></span>
+                            danilosantos.silva018@gmail.com
+                        </a>
+                        <a href="https://www.linkedin.com/in/danilo-t-4b86a2136/" class="contact-link" target="_blank">
+                            <span class="icon"><i data-lucide="linkedin"></i></span>
+                            Danilo Silva
+                        </a>
+                        <a href="https://github.com/Danilo019" class="contact-link" target="_blank">
+                            <span class="icon"><i data-lucide="github"></i></span>
+                            Danilo019
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <form id="contact-form" class="contact-form">
+                        <input type="text" id="user_name" name="user_name" placeholder="// seu nome" required />
+                        <input type="email" id="user_email" name="user_email" placeholder="// seu e-mail" required />
+                        <textarea id="message" name="message" placeholder="// sua mensagem" required></textarea>
+                        <button type="submit" class="btn-send">ENVIAR MENSAGEM</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <a href="#inicio" class="logo">DEV.PORTFOLIO</a>
+        <p>// feito com código e café — 2026</p>
+        <p>scroll_to_top → <a href="#inicio" style="color:var(--blue-light);text-decoration:none;">↑</a></p>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>
