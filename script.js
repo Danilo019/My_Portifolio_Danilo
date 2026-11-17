@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initIcons();
     initThemeToggle();
+    initMobileMenu();
     initTypedEffect();
     initParticlesBackground();
     initContactForm();
@@ -13,6 +14,41 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollSpy();
     initProjectFilters();
 });
+
+/**
+ * Handles the responsive navigation menu.
+ */
+function initMobileMenu() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('primary-navigation');
+    if (!menuToggle || !navLinks) return;
+
+    const closeMenu = () => {
+        navLinks.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+    };
+
+    menuToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('is-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', event => {
+        if (!navLinks.contains(event.target) && !menuToggle.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeMenu();
+    });
+}
 
 // GSAP animations must run after all layout is painted to calculate positions correctly
 if (document.readyState === 'complete') {
@@ -174,9 +210,15 @@ function animate3DEntrance(targetSelector, triggerSelector) {
  */
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
-    if (!contactForm || typeof emailjs === 'undefined') return;
+    const status = document.getElementById('form-status');
+    if (!contactForm) return;
 
-    emailjs.init("YOUR_PUBLIC_KEY"); // Lembre-se de substituir pela chave real
+    const emailConfig = {
+        publicKey: 'YOUR_PUBLIC_KEY',
+        serviceId: 'YOUR_SERVICE_ID',
+        templateId: 'YOUR_TEMPLATE_ID'
+    };
+    const isConfigured = Object.values(emailConfig).every(value => !value.startsWith('YOUR_'));
 
     contactForm.addEventListener('submit', handleFormSubmit);
 
@@ -185,19 +227,37 @@ function initContactForm() {
         const btn = event.target.querySelector('.btn-send');
         if (!btn) return;
 
+        if (typeof emailjs === 'undefined' || !isConfigured) {
+            setStatus('O formulário ainda não está configurado. Envie sua mensagem pelo e-mail ao lado.', true);
+            return;
+        }
+
         updateButtonState(btn, 'ENVIANDO...', true);
         
-        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', event.target)
+        emailjs.sendForm(emailConfig.serviceId, emailConfig.templateId, event.target)
             .then(() => {
                 updateButtonState(btn, 'ENVIADO!', false);
                 event.target.reset();
+                setStatus('Mensagem enviada com sucesso!', false);
                 resetButtonStateAfterDelay(btn, 3000);
             })
             .catch((error) => {
                 console.error("Erro ao enviar email:", error);
                 updateButtonState(btn, 'ERRO. TENTE NOVAMENTE.', false);
+                setStatus('Não foi possível enviar a mensagem. Tente novamente.', true);
                 resetButtonStateAfterDelay(btn, 3000);
             });
+    }
+
+    if (typeof emailjs !== 'undefined' && isConfigured) {
+        emailjs.init(emailConfig.publicKey);
+    }
+
+    function setStatus(message, isError) {
+        if (!status) return;
+        status.textContent = message;
+        status.classList.toggle('is-error', isError);
+        status.classList.toggle('is-success', !isError);
     }
 
     function updateButtonState(btn, text, disabled) {
@@ -228,41 +288,52 @@ async function initGitHubStats() {
     };
 
     try {
-        const response = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
+        const [userResponse, reposResponse] = await Promise.all([
+            fetch(`https://api.github.com/users/${GITHUB_USER}`),
+            fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100`)
+        ]);
+        if (!userResponse.ok || !reposResponse.ok) {
+            throw new Error(`GitHub API error: ${userResponse.status}/${reposResponse.status}`);
         }
         
-        const data = await response.json();
-        updateGitHubUI(elements, data, GITHUB_USER);
+        const data = await userResponse.json();
+        const repositories = await reposResponse.json();
+        const stars = repositories.reduce((total, repository) => total + repository.stargazers_count, 0);
+        updateGitHubUI(elements, data, stars);
 
     } catch (error) {
         console.error("Falha ao carregar dados do GitHub:", error);
-        handleGitHubError(elements, GITHUB_USER);
+        handleGitHubError(elements);
     }
 }
 
 /**
  * Updates the DOM with GitHub user data.
  */
-function updateGitHubUI(elements, data, fallbackUser) {
+function updateGitHubUI(elements, data, stars) {
     if (elements.name) elements.name.textContent = data.name || data.login;
     if (elements.bio) elements.bio.textContent = data.bio || `@${data.login}`;
-    if (elements.repos) elements.repos.textContent = data.public_repos || '0';
-    if (elements.followers) elements.followers.textContent = data.followers || '0';
-    if (elements.following) elements.following.textContent = data.following || '0';
-    if (elements.statRepos) elements.statRepos.textContent = data.public_repos || '0';
+    if (elements.repos) elements.repos.textContent = data.public_repos ?? '–';
+    if (elements.followers) elements.followers.textContent = data.followers ?? '–';
+    if (elements.following) elements.following.textContent = data.following ?? '–';
+    if (elements.statRepos) elements.statRepos.textContent = data.public_repos ?? '–';
+    const starsElement = document.getElementById('stat-stars');
+    if (starsElement) starsElement.textContent = stars;
 }
 
 /**
  * Fallback UI for GitHub stats if the fetch fails.
  */
-function handleGitHubError(elements, fallbackUser) {
-    if (elements.bio) elements.bio.textContent = `@${fallbackUser}`;
-    if (elements.statRepos) elements.statRepos.textContent = '0';
-    if (elements.repos) elements.repos.textContent = '0';
-    if (elements.followers) elements.followers.textContent = '0';
-    if (elements.following) elements.following.textContent = '0';
+function handleGitHubError(elements) {
+    const unavailable = 'indisponível';
+    if (elements.name) elements.name.textContent = 'Danilo Silva';
+    if (elements.bio) elements.bio.textContent = '@Danilo019';
+    if (elements.statRepos) elements.statRepos.textContent = unavailable;
+    if (elements.repos) elements.repos.textContent = unavailable;
+    if (elements.followers) elements.followers.textContent = unavailable;
+    if (elements.following) elements.following.textContent = unavailable;
+    const starsElement = document.getElementById('stat-stars');
+    if (starsElement) starsElement.textContent = unavailable;
 }
 
 /**
@@ -310,8 +381,12 @@ function initProjectFilters() {
 }
 
 function updateActiveButton(buttons, activeBtn) {
-    buttons.forEach(b => b.classList.remove('active'));
+    buttons.forEach(button => {
+        button.classList.remove('active');
+        button.setAttribute('aria-pressed', 'false');
+    });
     activeBtn.classList.add('active');
+    activeBtn.setAttribute('aria-pressed', 'true');
 }
 
 function filterProjects(cards, filterValue) {
@@ -321,8 +396,8 @@ function filterProjects(cards, filterValue) {
             return;
         }
 
-        const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent);
-        if (tags.includes(filterValue)) {
+        const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim().toLowerCase());
+        if (tags.includes(filterValue.toLowerCase())) {
             card.style.display = 'block';
         } else {
             card.style.display = 'none';
